@@ -5,6 +5,7 @@
             <th>Coin name</th>
             <th>Coin quantity</th>
             <th>Price</th>
+            <th>Actions</th>
         </tr>
         </tr>
     </thead>
@@ -25,10 +26,10 @@
                 </td>
                 <td>
                     <form action="/nominal/delete/<%= nominal[i]._id %>?_method=DELETE" method="POST">
-                        <a class=" btn btn-warning" href="/nominal/edit/<%= nominal[i]._id %>">
+                        <a class=" btn btn-info btn-sm" href="/nominal/edit/<%= nominal[i]._id %>">
                             <i class="fas fa-pencil-alt"></i>
                             Update</a>
-                        <button class="btn btn-danger">
+                        <button class="btn btn-danger btn-sm">
                             <i class="fas fa-trash"></i>
                             Delete</button>
                     </form>

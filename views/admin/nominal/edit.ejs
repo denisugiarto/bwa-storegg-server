@@ -8,12 +8,12 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1><a href="/category">Category</a></h1>
+                                <h1>Nominal</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="/category">Category</a></li>
+                                    <li class="breadcrumb-item"><a href="/nominal">Nominal</a></li>
                                     <li class="breadcrumb-item active">Update</li>
                                 </ol>
                             </div>
@@ -27,28 +27,51 @@
                     <div class="container-fluid">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Form Update Category "<%= category.name %>"
+                                <h3 class="card-title">Form Update Nominal "<%= nominal.coinName %>"
                                 </h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form action="/category/edit/<%= category._id %>?_method=PUT" method="POST">
+                            <form action="/nominal/edit/<%= nominal._id %>?_method=PUT" method="POST">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label for="name">Category Name</label>
-                                        <input type="text" value="<%= category.name %>" name="name" class="form-control"
-                                            id="name" placeholder="Category name">
+                                        <label>Coin Name</label>
+                                        <select class="form-control select2" style="width: 100%;" name="coinName"
+                                            required>
+                                            <option value="Gold" <% if(nominal.coinName==="Gold" ) { %>
+                                                selected
+                                                <% } %>
+                                                    >Gold
+                                            </option>
+                                            <option value="Diamond" <% if(nominal.coinName==="Diamond" ) { %>
+                                                selected
+                                                <% } %>
+                                                    >Diamond
+                                            </option>
+                                            <option value="Jewel" <% if(nominal.coinName==="Jewel" ) { %>
+                                                selected
+                                                <% } %>
+                                                    >Jewel
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="coinQuantity">Quantity</label>
+                                        <input type="number" name="coinQuantity" class="form-control" id="coinQuantity"
+                                            placeholder="type your quantity" value=<%=nominal.coinQuantity %> >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input type="number" name="price" class="form-control" id="price"
+                                            placeholder="type your price" value=<%=nominal.price %>>
                                     </div>
                                 </div>
-                                <!-- /.card-body -->
 
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
                             </form>
                         </div>
-                        <!-- /.card-body -->
-                        <!-- /.col -->
                     </div>
                     <!-- /.container-fluid -->
                 </section>
