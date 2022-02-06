@@ -68,7 +68,7 @@ playerSchema.path("email").validate(
       throw err;
     }
   },
-  (attr) => `email: ${attr.value} already used`
+  (attr) => `${attr.value} already used`
 );
 
 playerSchema.path("username").validate(
@@ -82,7 +82,7 @@ playerSchema.path("username").validate(
       throw err;
     }
   },
-  (attr) => `username: ${attr.value} already used`
+  (attr) => `${attr.value} already used`
 );
 
 playerSchema.path("phoneNumber").validate(
@@ -96,7 +96,7 @@ playerSchema.path("phoneNumber").validate(
       throw err;
     }
   },
-  (attr) => `phoneNumber: ${attr.value} already used`
+  (attr) => `${attr.value} already used`
 );
 
 playerSchema.pre("save", function (next) {
