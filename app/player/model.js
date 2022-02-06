@@ -68,7 +68,35 @@ playerSchema.path("email").validate(
       throw err;
     }
   },
-  (attr) => `${attr.value} already used`
+  (attr) => `email: ${attr.value} already used`
+);
+
+playerSchema.path("username").validate(
+  async function (value) {
+    try {
+      const count = await this.model("Player").countDocuments({
+        username: value,
+      });
+      return !count;
+    } catch (err) {
+      throw err;
+    }
+  },
+  (attr) => `username: ${attr.value} already used`
+);
+
+playerSchema.path("phoneNumber").validate(
+  async function (value) {
+    try {
+      const count = await this.model("Player").countDocuments({
+        phoneNumber: value,
+      });
+      return !count;
+    } catch (err) {
+      throw err;
+    }
+  },
+  (attr) => `phoneNumber: ${attr.value} already used`
 );
 
 playerSchema.pre("save", function (next) {
