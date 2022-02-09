@@ -35,8 +35,10 @@ module.exports = {
       }
 
       res.status(200).json({
-        data: voucher,
-        payment,
+        data: {
+          detail: voucher,
+          payment,
+        },
       });
     } catch (err) {
       res.status(500).json({ message: err.message || `Internal server error` });
@@ -155,8 +157,10 @@ module.exports = {
       ]);
 
       res.status(200).json({
-        data: history,
-        total: total.length ? total[0].value : 0,
+        data: {
+          history,
+          total: total.length ? total[0].value : 0,
+        },
       });
     } catch (err) {
       res.status(500).json({ message: err.message || `Internal server error` });
@@ -203,7 +207,7 @@ module.exports = {
       const history = await Transaction.find({ player: req.player._id })
         .populate("category")
         .sort({ updatedAt: -1 });
-      res.status(200).json({ history, count });
+      res.status(200).json({ data: { history, count } });
     } catch (err) {
       res.status(500).json({ message: err.message || `Internal server error` });
     }
