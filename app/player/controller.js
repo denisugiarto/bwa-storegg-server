@@ -35,7 +35,7 @@ module.exports = {
       }
 
       res.status(200).json({
-        detail: voucher,
+        data: voucher,
         payment,
       });
     } catch (err) {
@@ -155,7 +155,7 @@ module.exports = {
       ]);
 
       res.status(200).json({
-        history,
+        data: history,
         total: total.length ? total[0].value : 0,
       });
     } catch (err) {
@@ -269,10 +269,12 @@ module.exports = {
             { new: true, runValidators: true }
           );
           res.status(201).json({
-            id: player.id,
-            name: player.name,
-            phoneNumber: player.phoneNumber,
-            avatar: player.avatar,
+            data: {
+              id: player.id,
+              name: player.name,
+              phoneNumber: player.phoneNumber,
+              avatar: player.avatar,
+            },
           });
         });
 
@@ -288,10 +290,12 @@ module.exports = {
           { new: true, runValidators: true }
         );
         res.status(201).json({
-          id: player.id,
-          name: player.name,
-          phoneNumber: player.phoneNumber,
-          avatar: player.avatar,
+          data: {
+            id: player.id,
+            name: player.name,
+            phoneNumber: player.phoneNumber,
+            avatar: player.avatar,
+          },
         });
       }
     } catch (err) {
