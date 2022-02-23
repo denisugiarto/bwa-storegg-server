@@ -12,7 +12,7 @@ const config = require("../../config");
 module.exports = {
   landingPage: async (req, res) => {
     try {
-      const voucher = await Voucher.find()
+      const voucher = await Voucher.find({ status: "Y" })
         .select("_id name status category thumbnail")
         .populate("category");
       res.status(200).json({ data: voucher });
@@ -35,10 +35,7 @@ module.exports = {
       }
 
       res.status(200).json({
-        data: {
-          detail: voucher,
-          payment,
-        },
+        data: { detail: voucher, payment },
       });
     } catch (err) {
       res.status(500).json({ message: err.message || `Internal server error` });
@@ -63,7 +60,6 @@ module.exports = {
         .populate("category")
         .populate("user");
 
-      // console.log("voucher :", res_voucher);
       if (!res_voucher)
         return res.status(404).json({ message: "voucher game not found" });
 
@@ -236,7 +232,6 @@ module.exports = {
 
       if (name.length) payload.name = name;
       if (phoneNumber.length) payload.phoneNumber = phoneNumber;
-
       if (req.file) {
         let tmp_path = req.file.path;
         let originalExt =
@@ -255,33 +250,42 @@ module.exports = {
         src.pipe(dest);
 
         src.on("end", async () => {
-          let player = await Player.findOne({ _id: req.player._id });
+          try {
+            let player = await Player.findOne({ _id: req.player._id });
 
-          let currentImage = `${config.rootPath}/public/uploads/${player.avatar}`;
-          if (fs.existsSync(currentImage)) {
-            fs.unlinkSync(currentImage);
+            let currentImage = `${config.rootPath}/public/uploads/${player.avatar}`;
+            if (fs.existsSync(currentImage)) {
+              fs.unlinkSync(currentImage);
+            }
+            player = await Player.findOneAndUpdate(
+              {
+                _id: req.player._id,
+              },
+              {
+                ...payload,
+                avatar: filename,
+              },
+              { new: true, runValidators: true }
+            );
+            res.status(201).json({
+              data: {
+                id: player.id,
+                name: player.name,
+                phoneNumber: player.phoneNumber,
+                avatar: player.avatar,
+              },
+            });
+          } catch (err) {
+            if (err && err.name == "ValidationError") {
+              return res.status(422).json({
+                error: 1,
+                message: err.message,
+                fields: err.errors,
+              });
+            }
+            next(err);
           }
-
-          player = await Player.findOneAndUpdate(
-            {
-              _id: req.player._id,
-            },
-            {
-              ...payload,
-              avatar: filename,
-            },
-            { new: true, runValidators: true }
-          );
-          res.status(201).json({
-            data: {
-              id: player.id,
-              name: player.name,
-              phoneNumber: player.phoneNumber,
-              avatar: player.avatar,
-            },
-          });
         });
-
         src.on("err", async () => {
           next(err);
         });
@@ -304,10 +308,10 @@ module.exports = {
       }
     } catch (err) {
       if (err && err.name === "ValidationError") {
-        res.status(4220).json({
+        res.status(422).json({
           error: 1,
           message: err.message,
-          fields: err.errors,
+          fields: err,
         });
       }
     }
